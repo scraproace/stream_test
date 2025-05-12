@@ -21,8 +21,8 @@ class DBController:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL,
                 password TEXT NOT NULL,
-                closing_day INTEGER,
-                goal_amount INTEGER,
+                closing_day INTEGER NOT NULL,
+                goal_amount INTEGER NOT NULL,
                 is_valid INTEGER DEFAULT 1
             )
         ''')
