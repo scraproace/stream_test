@@ -22,6 +22,6 @@ def show_setting_page(db: DBController) -> None:
                 st.error('パスワードが入力されていません')
             else:
                 if db.update_user(st.session_state['user_id'], username, password, closing_day, goal_amount):
-                    st.success(f'ユーザー名{username}が変更されました')
+                    st.success(f'ユーザー名{username}の登録情報が変更されました')
                 else:
                     st.error(f'ユーザー名{username}は既に存在します')
