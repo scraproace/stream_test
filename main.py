@@ -1,8 +1,8 @@
 import streamlit as st
 
-from module.const import CLOSING_DAY, GOAL_AMOUNT, LIMIT_AMOUNT, PIE_FONTPATH
+from module.const import LIMIT_AMOUNT, PIE_FONTPATH
 from module.db import DBController
-from module.page import show_home_page, show_add_place_page, show_login_page, show_create_account_page, show_shift_page
+from module.page import show_home_page, show_add_place_page, show_login_page, show_create_account_page, show_setting_page, show_shift_page
 
 
 def main():
@@ -14,6 +14,7 @@ def main():
     - ホーム: ホームページを表示
     - 勤務先追加: 勤務先追加ページを表示
     - シフト: シフトページを表示
+    - 設定: 設定ページを表示
     - ログイン: ログインページを表示
     - アカウント作成: アカウント作成ページを表示
     """
@@ -22,18 +23,20 @@ def main():
     st.title('シフト管理')
 
     if 'is_login' in st.session_state:
-        menu = ['ホーム', '勤務先追加', 'シフト']
+        menu = ['ホーム', '勤務先追加', 'シフト', '設定']
     else:
         menu = ['ログイン', 'アカウント作成']
 
     choice = st.sidebar.selectbox('メニュー', menu)
 
     if choice == 'ホーム':
-        show_home_page(db, CLOSING_DAY, GOAL_AMOUNT, LIMIT_AMOUNT, PIE_FONTPATH)
+        show_home_page(db, LIMIT_AMOUNT, PIE_FONTPATH)
     elif choice == '勤務先追加':
         show_add_place_page(db)
     elif choice == 'シフト':
         show_shift_page(db)
+    elif choice == '設定':
+        show_setting_page(db)
     elif choice == 'ログイン':
         show_login_page(db)
     elif choice == 'アカウント作成':

@@ -1,1 +1,1 @@
-from .constants import CLOSING_DAY, GOAL_AMOUNT, LIMIT_AMOUNT, PIE_FONTPATH
+from .constants import LIMIT_AMOUNT, PIE_FONTPATH

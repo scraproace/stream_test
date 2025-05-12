@@ -9,15 +9,14 @@ from module.db import DBController
 
 def show_home_page(
     db: DBController,
-    closing_day: int,
-    goal_amount: int,
     limit_mount: int,
     pie_fontpath: str
 ) -> None:
     """ホームページを表示します。"""
     today = datetime.today()
 
-    start_datetime, end_datetime = _get_date_period(today, closing_day)
+    user = db.get_user(st.session_state['user_id'])
+    start_datetime, end_datetime = _get_date_period(today, user['closing_day'])
     start_date_str = datetime.strftime(start_datetime, '%Y/%m/%d')
     end_date_str = datetime.strftime(end_datetime, '%Y/%m/%d')
 
@@ -36,7 +35,7 @@ def show_home_page(
     _display_pie_chart(
         current_amount,
         estimated_amount,
-        goal_amount,
+        user['goal_amount'],
         start_date_str,
         end_date_str,
         pie_fontpath,

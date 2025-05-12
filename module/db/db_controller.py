@@ -21,6 +21,8 @@ class DBController:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL,
                 password TEXT NOT NULL,
+                closing_day INTEGER,
+                goal_amount INTEGER,
                 is_valid INTEGER DEFAULT 1
             )
         ''')
@@ -72,27 +74,76 @@ class DBController:
         result = self.cur.fetchone()
         return result['id'] if result is not None else None
 
-    def add_user(self, username: str, password: str) -> bool:
-        """新しいユーザーを追加します。"""
+    def get_user(self, user_id: int) -> list[str]:
+        """指定されたユーザーの情報を取得します。"""
         self.cur.execute('''
-            SELECT * FROM users
-            WHERE username = :username
-            AND is_valid = 1
-            LIMIT 1
+            SELECT username, password, closing_day, goal_amount FROM users
+            WHERE id = :user_id
         ''',
-        {'username': username})
+        {'user_id': user_id})
 
-        if self.cur.fetchone() is not None:
+        user = self.cur.fetchone()
+        return user
+
+    def add_user(
+        self,
+        username: str,
+        password: str,
+        closing_day: int,
+        goal_amount: int
+    ) -> bool:
+        """新しいユーザーを追加します。"""
+        if self.is_exist_user(username):
             return False
 
         self.cur.execute('''
-            INSERT INTO users(username, password)
-            VALUES (:username, :password)
+            INSERT INTO users(username, password, closing_day, goal_amount)
+            VALUES (:username, :password, :closing_day, :goal_amount)
         ''',
-        {'username': username, 'password': password})
+        {'username': username, 'password': password, 'closing_day': closing_day, 'goal_amount': goal_amount})
 
         self.conn.commit()
         return True
+
+    def update_user(
+        self,
+        user_id: int,
+        username: str,
+        password: str,
+        closing_day: int,
+        goal_amount: int
+    ) -> bool:
+        """ユーザー情報を更新します。"""
+        if self.is_exist_user(username, user_id):
+            return False
+
+        self.cur.execute('''
+            UPDATE users
+            SET username = :username,
+                password = :password,
+                closing_day = :closing_day,
+                goal_amount = :goal_amount
+            WHERE id = :user_id
+        ''',
+        {'user_id': user_id, 'username': username, 'password': password, 'closing_day': closing_day, 'goal_amount': goal_amount})
+
+        self.conn.commit()
+        return True
+
+    def is_exist_user(self, username: str, exclude_user_id: int | None = None) -> bool:
+        """ユーザー名の重複を確認します。"""
+        self.cur.execute('''
+            SELECT * FROM users
+            WHERE id != :exclude_user_id
+            AND username = :username
+            AND is_valid = 1
+            LIMIT 1
+        ''',
+        {'username': username, 'exclude_user_id': exclude_user_id})
+
+        if self.cur.fetchone() is not None:
+            return True
+        return False
 
     def add_place(self, user_id: int, name: str) -> bool:
         """新しい勤務先を追加します。"""
