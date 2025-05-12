@@ -7,11 +7,11 @@ import streamlit as st
 from module.db import DBController
 
 
-def show_home_page(
-    db: DBController,
-    limit_mount: int,
-    pie_fontpath: str
-) -> None:
+LIMIT_AMOUNT = 1_030_000  # 限度額
+PIE_FONTPATH = './fonts/msgothic.ttc'  # 円グラフのフォントパス
+
+
+def show_home_page(db: DBController) -> None:
     """ホームページを表示します。"""
     today = datetime.today()
 
@@ -38,11 +38,11 @@ def show_home_page(
         user['goal_amount'],
         start_date_str,
         end_date_str,
-        pie_fontpath,
+        PIE_FONTPATH,
     )
 
     st.markdown(
-        f'<div style="text-align: center; font-size: 28px; font-weight: bold;">{limit_mount:,}円まで残り{limit_mount - year_amount:,}円</div>',
+        f'<div style="text-align: center; font-size: 28px; font-weight: bold;">{LIMIT_AMOUNT:,}円まで残り{LIMIT_AMOUNT - year_amount:,}円</div>',
         unsafe_allow_html=True
     )
 

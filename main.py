@@ -1,6 +1,5 @@
 import streamlit as st
 
-from module.const import LIMIT_AMOUNT, PIE_FONTPATH
 from module.db import DBController
 from module.page import show_home_page, show_add_place_page, show_login_page, show_create_account_page, show_setting_page, show_shift_page
 
@@ -30,7 +29,7 @@ def main():
     choice = st.sidebar.selectbox('メニュー', menu)
 
     if choice == 'ホーム':
-        show_home_page(db, LIMIT_AMOUNT, PIE_FONTPATH)
+        show_home_page(db)
     elif choice == '勤務先追加':
         show_add_place_page(db)
     elif choice == 'シフト':
