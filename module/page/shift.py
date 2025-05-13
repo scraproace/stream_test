@@ -33,6 +33,7 @@ def show_shift_page(db: DBController) -> None:
             'day': '2-digit'
         },
         'locale': 'ja',
+        'height': 'auto',
     }
 
     calender_event = st_calendar.calendar(events=events, options=options)
